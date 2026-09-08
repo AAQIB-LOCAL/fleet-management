@@ -1,4 +1,10 @@
 import { z } from 'zod';
+import { sendProblem } from '../middleware/problemDetails.js';
+
+const premiumSchema = z.string().optional().transform(v => v ? Number(v) : undefined).refine(
+  v => v === undefined || Number.isFinite(v),
+  'Must be a valid number'
+);
 
 const policySearchSchema = z.object({
   policyNumber: z.string().trim().max(50).optional(),
@@ -9,37 +15,35 @@ const policySearchSchema = z.object({
   status: z.string().trim().max(50).optional(),
   product: z.string().trim().max(100).optional(),
   agentCode: z.string().trim().max(50).optional(),
-  minPremium: z.string().optional().transform(v => v ? Number(v) : undefined),
-  maxPremium: z.string().optional().transform(v => v ? Number(v) : undefined),
+  minPremium: premiumSchema,
+  maxPremium: premiumSchema,
   startDate: z.string().trim().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   endDate: z.string().trim().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
 }).refine(data => Object.keys(data).length > 0, {
-  message: "At least one query parameter must be provided"
+  message: 'At least one query parameter must be provided'
+}).refine(data => data.minPremium === undefined || data.maxPremium === undefined || data.minPremium <= data.maxPremium, {
+  message: 'minPremium cannot be greater than maxPremium'
 });
 
 const policyDetailsSchema = z.object({
   policyNumber: z.string().trim().min(1, 'policyNumber cannot be empty').max(50)
 });
 
+const validationError = (req, res, error) => sendProblem(res, req, 400, 'Bad Request', 'Validation failed', {
+  errors: error.errors.map(err => ({
+    field: err.path.join('.'),
+    message: err.message,
+  })),
+});
+
 export const policyValidators = {
   validateSearch: (req, res, next) => {
     try {
-      const result = policySearchSchema.parse(req.query);
-      req.query = result;
+      req.query = policySearchSchema.parse(req.query);
       next();
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return res.status(400).json({
-          success: false,
-          error: {
-            code: "VALIDATION_ERROR",
-            message: "Validation failed",
-            details: error.errors.map(err => {
-              const field = err.path.join('.');
-              return field ? `${field}: ${err.message}` : err.message;
-            })
-          }
-        });
+        return validationError(req, res, error);
       }
       next(error);
     }
@@ -47,22 +51,11 @@ export const policyValidators = {
 
   validateDetails: (req, res, next) => {
     try {
-      const result = policyDetailsSchema.parse(req.query);
-      req.query = result;
+      req.query = policyDetailsSchema.parse(req.query);
       next();
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return res.status(400).json({
-          success: false,
-          error: {
-            code: "VALIDATION_ERROR",
-            message: "Validation failed",
-            details: error.errors.map(err => {
-              const field = err.path.join('.');
-              return field ? `${field}: ${err.message}` : err.message;
-            })
-          }
-        });
+        return validationError(req, res, error);
       }
       next(error);
     }

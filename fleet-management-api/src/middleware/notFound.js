@@ -1,9 +1,11 @@
+import { sendProblem } from './problemDetails.js';
+
 export const notFoundHandler = (req, res) => {
-  res.status(404).json({
-    title: 'Not Found',
-    status: 404,
-    detail: `Route ${req.method} ${req.originalUrl} not found`,
-    instance: req.originalUrl,
-    traceId: req.traceId,
-  });
+  return sendProblem(
+    res,
+    req,
+    404,
+    'Not Found',
+    `Route ${req.method} ${req.originalUrl} not found`
+  );
 };
