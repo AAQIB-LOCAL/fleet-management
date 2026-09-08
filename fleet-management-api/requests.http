@@ -1,0 +1,45 @@
+@baseUrl = http://localhost:8080/api/v1
+@apiKey = secret-api-key
+
+### Health Check
+GET http://localhost:8080/healthz
+
+### Metrics
+GET http://localhost:8080/metrics
+
+### Create Vehicle
+# @name createVehicle
+POST {{baseUrl}}/vehicles
+x-api-key: {{apiKey}}
+Idempotency-Key: {{$guid}}
+Content-Type: application/json
+
+{
+  "vin": "VOLTSWAGENID42023",
+  "make": "Volkswagen",
+  "model": "ID.4",
+  "year": 2023,
+  "color": "Blue"
+}
+
+### List Vehicles
+GET {{baseUrl}}/vehicles?make=Volkswagen
+x-api-key: {{apiKey}}
+
+### Start Session
+# @name startSession
+POST {{baseUrl}}/sessions
+x-api-key: {{apiKey}}
+Idempotency-Key: {{$guid}}
+Content-Type: application/json
+
+{
+  "vehicleId": "{{createVehicle.response.body.id}}",
+  "stationId": "ST-001",
+  "maxKwh": 50.5
+}
+
+### Stop Session
+POST {{baseUrl}}/sessions/{{startSession.response.body.id}}/stop
+x-api-key: {{apiKey}}
+Idempotency-Key: {{$guid}}

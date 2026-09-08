@@ -1,0 +1,212 @@
+[
+  {
+    "vin": "1P2TE42ACJHLYYE8T",
+    "make": "Tesla",
+    "model": "Model Y",
+    "year": 2024,
+    "color": "White"
+  },
+  {
+    "vin": "WEP0FJPRR13UXHEBD",
+    "make": "Polestar",
+    "model": "Polestar 2",
+    "year": 2025,
+    "color": "White"
+  },
+  {
+    "vin": "26SHR4DKDXRFPSEL5",
+    "make": "Tesla",
+    "model": "Model Y",
+    "year": 2022,
+    "color": "Black"
+  },
+  {
+    "vin": "0K6B1EL9WX9K4WESF",
+    "make": "Rivian",
+    "model": "R1T",
+    "year": 2021,
+    "color": "Silver"
+  },
+  {
+    "vin": "EY9ZVEAS01GWPU7SA",
+    "make": "Volkswagen",
+    "model": "ID.Buzz",
+    "year": 2025,
+    "color": "Midnight"
+  },
+  {
+    "vin": "L02HGNFUMGS495XNX",
+    "make": "Chevrolet",
+    "model": "Bolt EV",
+    "year": 2021,
+    "color": "Black"
+  },
+  {
+    "vin": "DD5YM46248TENYMVM",
+    "make": "Volkswagen",
+    "model": "ID.4",
+    "year": 2023,
+    "color": "Silver"
+  },
+  {
+    "vin": "HRHDNPG73VYM7UL0L",
+    "make": "Tesla",
+    "model": "Cybertruck",
+    "year": 2021,
+    "color": "Black"
+  },
+  {
+    "vin": "38DY2MCA2TYZXHG7J",
+    "make": "Lucid",
+    "model": "Air Grand Touring",
+    "year": 2022,
+    "color": "Blue"
+  },
+  {
+    "vin": "S4G3T746RD58SGVV2",
+    "make": "Tesla",
+    "model": "Model X",
+    "year": 2020,
+    "color": "Blue"
+  },
+  {
+    "vin": "MJS120ERJ0N3696C8",
+    "make": "Rivian",
+    "model": "R1T",
+    "year": 2022,
+    "color": "Black"
+  },
+  {
+    "vin": "VSJ623AESZD6SX0MP",
+    "make": "Chevrolet",
+    "model": "Blazer EV",
+    "year": 2024,
+    "color": "Midnight"
+  },
+  {
+    "vin": "2LC4CG75FJPZX0HS4",
+    "make": "Ford",
+    "model": "Mustang Mach-E",
+    "year": 2022,
+    "color": "White"
+  },
+  {
+    "vin": "CUCU6DABK3DYCDSKC",
+    "make": "Ford",
+    "model": "F-150 Lightning",
+    "year": 2023,
+    "color": "Red"
+  },
+  {
+    "vin": "UCU5EL8TPHP66Z96P",
+    "make": "Ford",
+    "model": "F-150 Lightning",
+    "year": 2024,
+    "color": "Forest Green"
+  },
+  {
+    "vin": "EKW6E34GRBKZHZVKK",
+    "make": "Volkswagen",
+    "model": "ID.Buzz",
+    "year": 2022,
+    "color": "White"
+  },
+  {
+    "vin": "7R43E18GSXSYME63K",
+    "make": "Polestar",
+    "model": "Polestar 2",
+    "year": 2022,
+    "color": "Silver"
+  },
+  {
+    "vin": "SDZ0RJDZZ35228G2C",
+    "make": "Tesla",
+    "model": "Cybertruck",
+    "year": 2021,
+    "color": "Midnight"
+  },
+  {
+    "vin": "ZW2PRLW3VYLUHH5X9",
+    "make": "Lucid",
+    "model": "Air Grand Touring",
+    "year": 2024,
+    "color": "Forest Green"
+  },
+  {
+    "vin": "WGFMGR9GKVAXRKNE0",
+    "make": "Volkswagen",
+    "model": "ID.3",
+    "year": 2023,
+    "color": "Midnight"
+  },
+  {
+    "vin": "50WXFD8BEEU8F23DS",
+    "make": "Polestar",
+    "model": "Polestar 3",
+    "year": 2022,
+    "color": "Black"
+  },
+  {
+    "vin": "CC9G1T8N6Z0AN0S70",
+    "make": "Rivian",
+    "model": "R1T",
+    "year": 2025,
+    "color": "Silver"
+  },
+  {
+    "vin": "YE92W7RWSY75BCTX0",
+    "make": "Polestar",
+    "model": "Polestar 2",
+    "year": 2021,
+    "color": "Black"
+  },
+  {
+    "vin": "56TN2KP2NE0968K1B",
+    "make": "Ford",
+    "model": "Mustang Mach-E",
+    "year": 2020,
+    "color": "White"
+  },
+  {
+    "vin": "5S5MELN6CX71ZETX1",
+    "make": "Chevrolet",
+    "model": "Silverado EV",
+    "year": 2022,
+    "color": "Midnight"
+  },
+  {
+    "vin": "J0YAJPGLG47YZRDZU",
+    "make": "Rivian",
+    "model": "R1T",
+    "year": 2020,
+    "color": "Black"
+  },
+  {
+    "vin": "V4AR7NXU8UKZUW5Y4",
+    "make": "Volkswagen",
+    "model": "ID.4",
+    "year": 2021,
+    "color": "Black"
+  },
+  {
+    "vin": "SBGSB2HS2XBBRPDCJ",
+    "make": "Polestar",
+    "model": "Polestar 2",
+    "year": 2021,
+    "color": "White"
+  },
+  {
+    "vin": "VT0U90F79E739DF7T",
+    "make": "Chevrolet",
+    "model": "Silverado EV",
+    "year": 2021,
+    "color": "Red"
+  },
+  {
+    "vin": "T92BJ5PSEXGU84RU6",
+    "make": "Chevrolet",
+    "model": "Blazer EV",
+    "year": 2024,
+    "color": "Black"
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "name": "fleet-management-ui",
+  "version": "1.0.0",
+  "description": "Premium Fleet Management UI",
+  "scripts": {
+    "start": "npx serve . -l 3000"
+  }
+}
