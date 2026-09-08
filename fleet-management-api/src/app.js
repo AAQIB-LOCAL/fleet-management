@@ -9,19 +9,15 @@ import { healthHandler, readinessHandler } from './core/health.js';
 import { metricsRegistry, httpRequestsTotal, httpRequestDuration } from './core/metrics.js';
 import { corsMiddleware } from './core/cors.js';
 import { logger } from './core/logger.js';
-import { vehicleRouter } from './routes/apiA.js';
-import { sessionRouter } from './routes/apiB.js';
-import { policyRouter } from './routes/policyRoutes.js';
+import { apiRouter } from './routes/index.js';
 
 const app = express();
 
-// Security and Base Middleware
 app.use(helmet());
 app.use(corsMiddleware);
 app.use(express.json());
 app.use(traceMiddleware);
 
-// Observability: Metrics Collection
 app.use((req, res, next) => {
   const startAt = process.hrtime();
   res.on('finish', () => {
@@ -43,7 +39,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Operational Endpoints
 app.get('/healthz', healthHandler);
 app.get('/readyz', readinessHandler);
 app.get('/metrics', async (req, res) => {
@@ -51,12 +46,8 @@ app.get('/metrics', async (req, res) => {
   res.end(await metricsRegistry.metrics());
 });
 
-// API Routes
-app.use('/api/v1/vehicles', rateLimitMiddleware, authMiddleware, vehicleRouter);
-app.use('/api/v1/sessions', rateLimitMiddleware, authMiddleware, sessionRouter);
-app.use('/api/policies', policyRouter);
+app.use('/api/v1', rateLimitMiddleware, authMiddleware, apiRouter);
 
-// Error Handling
 app.use(notFoundHandler);
 app.use(errorHandler);
 
