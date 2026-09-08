@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Fleet Management API
-  description: Service for managing EV fleets and charging sessions.
+  description: Centralized API for EV fleet assets, charging sessions, and policy operations.
   version: 1.0.0
   license:
     name: MIT
@@ -19,119 +19,71 @@ components:
       type: object
       required: [title, status, detail, traceId]
       properties:
-        type:
-          type: string
-          example: about:blank
-        title:
-          type: string
-          example: Bad Request
-        status:
-          type: integer
-          example: 400
-        detail:
-          type: string
-          example: Validation failed
-        instance:
-          type: string
-          example: /api/v1/vehicles
-        traceId:
-          type: string
-          format: uuid
+        type: { type: string, example: about:blank }
+        title: { type: string, example: Bad Request }
+        status: { type: integer, example: 400 }
+        detail: { type: string, example: Validation failed }
+        instance: { type: string, example: /api/v1/vehicles }
+        traceId: { type: string, format: uuid }
         errors:
           type: array
           items:
             type: object
             properties:
-              field:
-                type: string
-              message:
-                type: string
+              field: { type: string }
+              message: { type: string }
     Vehicle:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-        vin:
-          type: string
-          minLength: 17
-          maxLength: 17
-        make:
-          type: string
-        model:
-          type: string
-        year:
-          type: integer
-        color:
-          type: string
-        status:
-          type: string
-          enum: [active, maintenance, retired]
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+        id: { type: string, format: uuid }
+        vin: { type: string, minLength: 17, maxLength: 17 }
+        make: { type: string }
+        model: { type: string }
+        year: { type: integer }
+        color: { type: string }
+        status: { type: string, enum: [active, maintenance, retired] }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
     Session:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-        vehicleId:
-          type: string
-          format: uuid
-        stationId:
-          type: string
-        maxKwh:
-          type: number
-        consumedKwh:
-          type: number
-        status:
-          type: string
-          enum: [active, completed]
-        startedAt:
-          type: string
-          format: date-time
-        endedAt:
-          type: string
-          format: date-time
+        id: { type: string, format: uuid }
+        vehicleId: { type: string, format: uuid }
+        stationId: { type: string }
+        maxKwh: { type: number }
+        consumedKwh: { type: number }
+        status: { type: string, enum: [active, completed] }
+        startedAt: { type: string, format: date-time }
+        endedAt: { type: string, format: date-time }
+    Policy:
+      type: object
+      properties:
+        PolicyNumber: { type: string }
+        InsuredName: { type: string, nullable: true }
+        ProductName: { type: string, nullable: true }
+        AgentCode: { type: string, nullable: true }
+        EndDate: { type: string, nullable: true }
+        PremiumAmount: { type: number, nullable: true }
 paths:
   /api/v1/vehicles:
     get:
-      tags: [API A - Vehicles]
+      tags: [Vehicles]
       summary: List vehicles
       security: [{ ApiKeyAuth: [] }]
       parameters:
-        - name: page
-          in: query
-          schema: { type: integer, default: 1 }
-        - name: pageSize
-          in: query
-          schema: { type: integer, default: 50, maximum: 500 }
+        - { name: page, in: query, schema: { type: integer, default: 1 } }
+        - { name: pageSize, in: query, schema: { type: integer, default: 50, maximum: 500 } }
+        - { name: make, in: query, schema: { type: string } }
+        - { name: status, in: query, schema: { type: string } }
       responses:
         200:
           description: List of vehicles
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items: { $ref: '#/components/schemas/Vehicle' }
-                  total: { type: integer }
-                  page: { type: integer }
-                  pageSize: { type: integer }
     post:
-      tags: [API A - Vehicles]
+      tags: [Vehicles]
       summary: Create vehicle
       security: [{ ApiKeyAuth: [] }]
       parameters:
-        - name: Idempotency-Key
-          in: header
-          schema: { type: string }
+        - { name: Idempotency-Key, in: header, schema: { type: string } }
       requestBody:
         required: true
         content:
@@ -150,15 +102,62 @@ paths:
           content:
             application/json:
               schema: { $ref: '#/components/schemas/Vehicle' }
+  /api/v1/vehicles/{id}:
+    get:
+      tags: [Vehicles]
+      summary: Get vehicle
+      security: [{ ApiKeyAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        200:
+          description: Vehicle
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Vehicle' }
+        404: { description: Vehicle not found }
+    patch:
+      tags: [Vehicles]
+      summary: Update vehicle
+      security: [{ ApiKeyAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: If-Match, in: header, schema: { type: string } }
+        - { name: Idempotency-Key, in: header, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                make: { type: string }
+                model: { type: string }
+                year: { type: integer }
+                color: { type: string }
+                status: { type: string }
+      responses:
+        200: { description: Updated vehicle }
+        404: { description: Vehicle not found }
+        412: { description: Resource has been modified }
   /api/v1/sessions:
+    get:
+      tags: [Charging Sessions]
+      summary: List charging sessions
+      security: [{ ApiKeyAuth: [] }]
+      parameters:
+        - { name: vehicleId, in: query, schema: { type: string, format: uuid } }
+        - { name: status, in: query, schema: { type: string } }
+        - { name: page, in: query, schema: { type: integer, default: 1 } }
+        - { name: pageSize, in: query, schema: { type: integer, default: 50 } }
+      responses:
+        200: { description: List of sessions }
     post:
-      tags: [API B - Sessions]
+      tags: [Charging Sessions]
       summary: Start charging session
       security: [{ ApiKeyAuth: [] }]
       parameters:
-        - name: Idempotency-Key
-          in: header
-          schema: { type: string }
+        - { name: Idempotency-Key, in: header, schema: { type: string } }
       requestBody:
         required: true
         content:
@@ -176,3 +175,37 @@ paths:
           content:
             application/json:
               schema: { $ref: '#/components/schemas/Session' }
+  /api/v1/sessions/{id}/stop:
+    post:
+      tags: [Charging Sessions]
+      summary: Stop charging session
+      security: [{ ApiKeyAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: Idempotency-Key, in: header, schema: { type: string } }
+      responses:
+        200: { description: Session stopped }
+        404: { description: Session not found }
+  /api/v1/policies/search:
+    get:
+      tags: [Policy Operations]
+      summary: Search policies
+      security: [{ ApiKeyAuth: [] }]
+      responses:
+        200:
+          description: Matching policies
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Policy' }
+  /api/v1/policies/details:
+    get:
+      tags: [Policy Operations]
+      summary: Get policy details
+      security: [{ ApiKeyAuth: [] }]
+      parameters:
+        - { name: policyNumber, in: query, required: true, schema: { type: string } }
+      responses:
+        200: { description: Policy details }
+        404: { description: Policy not found }

@@ -12,10 +12,13 @@ Production-grade Node.js 24 service for EV Fleet and Charging Session Management
 - **Testing**: `node:test`
 
 ## Features
-- **API A (Vehicles)**: Create, List, and Update EV fleet assets.
-- **API B (Sessions)**: Start and Stop charging sessions.
-- **Idempotency**: Support for `Idempotency-Key` header.
+- **Vehicles**: Create, list, retrieve, and update EV fleet assets.
+- **Charging Sessions**: Start, stop, and list charging sessions.
+- **Policy Operations**: Search policies and retrieve policy details.
+- **Idempotency**: Support for `Idempotency-Key` on state-changing operations.
 - **Concurrency**: ETag/If-Match for vehicle updates.
+- **Validation**: Zod-backed request validation across the API.
+- **Security**: API key authentication, Helmet, CORS, and rate limiting at the shared API boundary.
 - **Observability**: `/healthz`, `/readyz`, and `/metrics`.
 - **Traceability**: `X-Trace-Id` correlation across logs and responses.
 
@@ -44,7 +47,14 @@ Production-grade Node.js 24 service for EV Fleet and Charging Session Management
 ## API Documentation
 The OpenAPI 3.1 spec is available in `openapi.yaml`.
 
-### Example Request (Create Vehicle)
+All protected business endpoints are grouped under the versioned `/api/v1` API boundary:
+
+- `/api/v1/vehicles`
+- `/api/v1/sessions`
+- `/api/v1/policies/search`
+- `/api/v1/policies/details`
+
+## Example Request (Create Vehicle)
 ```bash
 curl -X POST http://localhost:8080/api/v1/vehicles \
   -H "x-api-key: secret-api-key" \
