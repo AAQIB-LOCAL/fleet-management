@@ -1,5 +1,3 @@
-import crypto from 'node:crypto';
-
 export class MemoryStore {
   constructor() {
     this.vehicles = new Map();
@@ -7,7 +5,12 @@ export class MemoryStore {
     this.idempotencyKeys = new Map();
   }
 
-  // Vehicles
+  clear() {
+    this.vehicles.clear();
+    this.sessions.clear();
+    this.idempotencyKeys.clear();
+  }
+
   async saveVehicle(vehicle) {
     this.vehicles.set(vehicle.id, { ...vehicle, updatedAt: new Date().toISOString() });
     return this.vehicles.get(vehicle.id);
@@ -25,7 +28,6 @@ export class MemoryStore {
     return Array.from(this.vehicles.values()).find(v => v.vin === vin);
   }
 
-  // Sessions
   async saveSession(session) {
     this.sessions.set(session.id, { ...session, updatedAt: new Date().toISOString() });
     return this.sessions.get(session.id);
@@ -43,7 +45,6 @@ export class MemoryStore {
     return Array.from(this.sessions.values()).find(s => s.vehicleId === vehicleId && s.status === 'active');
   }
 
-  // Idempotency
   async getIdempotencyRecord(key) {
     const record = this.idempotencyKeys.get(key);
     if (record && new Date(record.expiresAt) < new Date()) {
